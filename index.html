@@ -1,80 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2575.4">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Camera Scanner</title>
+  <style>
+    body { text-align: center; font-family: sans-serif; background: #f4f4f4; }
+    video { border-radius: 10px; width: 90%; max-width: 300px; margin-top: 20px; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; }
   </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;AI Camera Scanner&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>body { text-align: center; font-family: sans-serif; background: #f4f4f4; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>video { border-radius: 10px; width: 90%; max-width: 300px; margin-top: 20px; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>button { margin-top: 20px; padding: 10px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; }</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;h1&gt;AI Camera Scanner&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;button onclick="init()"&gt;Start Camera&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="webcam-container"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;div id="label-container"&gt;&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;!-- TensorFlow &amp; Teachable Machine --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"&gt;&lt;/script&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>const URL = "./"; // current folder</p>
-<p class="p1"><span class="Apple-converted-space">    </span>let model, webcam, labelContainer, maxPredictions;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function init() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const modelURL = URL + "model.json";</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const metadataURL = URL + "metadata.json";</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>model = await tmImage.load(modelURL, metadataURL);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>maxPredictions = model.getTotalClasses();</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>// Setup camera (mobile friendly)</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const flip = true;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>webcam = new tmImage.Webcam(300, 300, flip);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>await webcam.setup({ facingMode: "environment" }); // use back camera on phones</p>
-<p class="p1"><span class="Apple-converted-space">      </span>await webcam.play();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>window.requestAnimationFrame(loop);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">      </span>document.getElementById("webcam-container").appendChild(webcam.canvas);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>labelContainer = document.getElementById("label-container");</p>
-<p class="p1"><span class="Apple-converted-space">      </span>for (let i = 0; i &lt; maxPredictions; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>labelContainer.appendChild(document.createElement("div"));</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function loop() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>webcam.update();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>await predict();</p>
-<p class="p1"><span class="Apple-converted-space">      </span>window.requestAnimationFrame(loop);</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>async function predict() {</p>
-<p class="p1"><span class="Apple-converted-space">      </span>const prediction = await model.predict(webcam.canvas);</p>
-<p class="p1"><span class="Apple-converted-space">      </span>for (let i = 0; i &lt; maxPredictions; i++) {</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const classPrediction =</p>
-<p class="p1"><span class="Apple-converted-space">          </span>prediction[i].className + ": " + prediction[i].probability.toFixed(2);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>labelContainer.childNodes[i].innerHTML = classPrediction;</p>
-<p class="p1"><span class="Apple-converted-space">      </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+  <h1>AI Camera Scanner</h1>
+  <button onclick="init()">Start Camera</button>
+  <div id="webcam-container"></div>
+  <div id="label-container"></div>
+
+  <!-- TensorFlow & Teachable Machine -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
+
+  <script>
+    const URL = "./";
+    let model, webcam, labelContainer, maxPredictions;
+
+    async function init() {
+      const modelURL = URL + "model.json";
+      const metadataURL = URL + "metadata.json";
+
+      model = await tmImage.load(modelURL, metadataURL);
+      maxPredictions = model.getTotalClasses();
+
+      const flip = true;
+      webcam = new tmImage.Webcam(300, 300, flip);
+      await webcam.setup({ facingMode: "environment" });
+      await webcam.play();
+      window.requestAnimationFrame(loop);
+
+      document.getElementById("webcam-container").appendChild(webcam.canvas);
+      labelContainer = document.getElementById("label-container");
+      for (let i = 0; i < maxPredictions; i++) {
+        labelContainer.appendChild(document.createElement("div"));
+      }
+    }
+
+    async function loop() {
+      webcam.update();
+      await predict();
+      window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+      const prediction = await model.predict(webcam.canvas);
+      for (let i = 0; i < maxPredictions; i++) {
+        const classPrediction =
+          prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+        labelContainer.childNodes[i].innerHTML = classPrediction;
+      }
+    }
+  </script>
 </body>
 </html>
