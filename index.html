@@ -5,9 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AI Camera Scanner</title>
   <style>
-    body { text-align: center; font-family: sans-serif; background: #f4f4f4; }
-    video { border-radius: 10px; width: 90%; max-width: 300px; margin-top: 20px; }
-    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; border-radius: 8px; cursor: pointer; }
+    body {
+      text-align: center;
+      font-family: sans-serif;
+      background: #f4f4f4;
+    }
+    video {
+      border-radius: 10px;
+      width: 90%;
+      max-width: 300px;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -21,7 +36,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest"></script>
 
   <script>
-    const URL = "./";
+    const URL = "https://teachablemachine.withgoogle.com/models/LZ7iygpug/";
     let model, webcam, labelContainer, maxPredictions;
 
     async function init() {
@@ -33,7 +48,7 @@
 
       const flip = true;
       webcam = new tmImage.Webcam(300, 300, flip);
-      await webcam.setup({ facingMode: "environment" });
+      await webcam.setup({ facingMode: "environment" }); // mobile back camera
       await webcam.play();
       window.requestAnimationFrame(loop);
 
